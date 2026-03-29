@@ -10,6 +10,8 @@ class ProductPage(BasePage):
     def should_be_add_to_basket_button(self):
         assert self.browser.find_element(*ProductPageLocators.ADD_TO_BASKET_BUTTON), "Add to basket button not presented"
 
+    def add_to_basket(self):
+        self.browser.find_element(*ProductPageLocators.ADD_TO_BASKET_BUTTON).click()
 
     def should_be_name_of_product(self):
         assert self.browser.find_element(*ProductPageLocators.NAME_OF_PRODUCT), "Name of product don't found"
@@ -62,9 +64,16 @@ class ProductPage(BasePage):
         self.should_be_price_of_product()
         self.should_be_add_to_basket_button()
 
-        add_to_busket_button = self.browser.find_element(*ProductPageLocators.ADD_TO_BASKET_BUTTON)
-        add_to_busket_button.click()
+        self.add_to_basket()
 
         self.solve_quiz_and_get_code()
         self.should_be_msg_about_adding()
         self.compare_basket_and_product_price()
+
+    def should_not_be_success_message(self):
+        assert self.is_not_element_present(*ProductPageLocators.MESSAGE_ABOUT_ADDING), \
+        "Success message is presented, but should not be"
+
+    def should_not_be_success_message_in_4_sec(self):
+        assert self.is_disappeared(*ProductPageLocators.MESSAGE_ABOUT_ADDING), \
+        "Success message is presented, but should not be in 4 seconds"
