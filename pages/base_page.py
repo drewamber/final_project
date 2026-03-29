@@ -53,3 +53,7 @@ class BasePage:
     def should_be_login_url(self):
         assert "login" in self.browser.current_url, \
             f"Expected 'login' to be in URL, but got {self.browser.current_url}"
+
+    def should_be_authorized_user(self):
+        assert self.is_element_present(*BasePageLocators.USER_ICON), "User icon is not presented," \
+                                                                    " probably unauthorised user"

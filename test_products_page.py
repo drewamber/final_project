@@ -4,9 +4,11 @@ import os
 sys.path.append(os.path.abspath(os.path.dirname(__file__)))
 # Без этой части base page тесты не запускаются
 
+import time
 import pytest
-from pages.product_page import ProductPage
+from .pages.product_page import ProductPage
 from .pages.basket_page import BasketPage
+from .pages.login_page import LoginPage
 
 @pytest.mark.multicheck
 @pytest.mark.parametrize(
@@ -106,3 +108,33 @@ def test_guest_cant_see_product_in_basket_opened_from_product_page_no_row(browse
     page.go_to_basket_page()
     basket_page = BasketPage(browser, browser.current_url)
     basket_page.should_not_be_items_in_basket()
+
+@pytest.mark.actions_user
+class TestUserAddToBasketFromProductPage():
+    @pytest.fixture(scope="function", autouse=True)
+    def setup(self,browser):
+        link = "http://selenium1py.pythonanywhere.com/accounts/login"
+        page = LoginPage(browser, link)
+        page.open()
+        page.register_new_user()
+
+
+
+    def test_user_cant_see_success_message(self, browser):
+        link = "http://selenium1py.pythonanywhere.com/catalogue/coders-at-work_207/?promo=offer0"
+        """
+        Тест кейс для проверки того, что юзер не видит сообщение об успешном добавлении в корзину при открытии страницы
+        """
+        product_page = ProductPage(browser, link)
+        product_page.open()
+        product_page.should_not_be_success_message()
+
+    def test_user_can_add_product_to_basket(self, browser):
+        link = "http://selenium1py.pythonanywhere.com/catalogue/coders-at-work_207/?promo=offer0"
+        """
+        Тест кейс для проверки того, что юзер может добавить продукт в корзину
+        """
+        product_page = ProductPage(browser, link)
+        product_page.open()
+        time.sleep(5)
+        product_page.add_product_to_basket()
