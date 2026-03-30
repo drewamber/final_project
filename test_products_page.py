@@ -1,8 +1,3 @@
-# Без этой части base page тесты не запускаются 
-import sys 
-import os 
-sys.path.append(os.path.abspath(os.path.dirname(__file__)))
-# Без этой части base page тесты не запускаются
 
 import time
 import pytest
@@ -10,7 +5,7 @@ from .pages.product_page import ProductPage
 from .pages.basket_page import BasketPage
 from .pages.login_page import LoginPage
 
-@pytest.mark.multicheck
+@pytest.mark.need_review
 @pytest.mark.parametrize(
     'link',
     [
@@ -30,9 +25,7 @@ from .pages.login_page import LoginPage
     ]
 )
 def test_guest_can_add_product_to_basket(browser, link):
-    """
-    Тест кейс для проверки того, что юзер может добавить продукт в корзину
-    """
+
     product_page = ProductPage(browser, link)
     product_page.open()
     product_page.add_product_to_basket()
@@ -40,9 +33,7 @@ def test_guest_can_add_product_to_basket(browser, link):
 @pytest.mark.negative_checks
 def test_guest_cant_see_success_message(browser):
     link = "http://selenium1py.pythonanywhere.com/catalogue/coders-at-work_207/?promo=offer0"
-    """
-    Тест кейс для проверки того, что юзер не видит сообщение об успешном добавлении в корзину при открытии страницы
-    """
+
     product_page = ProductPage(browser, link)
     product_page.open()
     product_page.should_not_be_success_message()
@@ -51,9 +42,7 @@ def test_guest_cant_see_success_message(browser):
 @pytest.mark.xfail(reason="падает по заданию")
 def test_guest_cant_see_success_message_after_adding_product_to_basket(browser):
     link = "http://selenium1py.pythonanywhere.com/catalogue/coders-at-work_207/?promo=offer0"
-    """
-    Тест кейс для проверки того, что юзер не видит сообщение об успешном добавлении в корзину при добавлении товара в корзину
-    """
+
     product_page = ProductPage(browser, link)
     product_page.open()
     product_page.should_be_add_to_basket_button()
@@ -65,9 +54,7 @@ def test_guest_cant_see_success_message_after_adding_product_to_basket(browser):
 @pytest.mark.xfail(reason="падает по заданию")
 def test_message_disappeared_after_adding_product_to_basket(browser):
     link = "http://selenium1py.pythonanywhere.com/catalogue/coders-at-work_207/?promo=offer0"
-    """
-    Тест кейс для проверки того, что сообщение о добавлении исчезает максимум в течение 4 секунд после добавления 
-    """
+
     product_page = ProductPage(browser, link)
     product_page.open()
     product_page.should_be_add_to_basket_button()
@@ -82,7 +69,7 @@ def test_guest_should_see_login_link_on_product_page(browser):
     page.open()
     page.should_be_login_link()
 
-@pytest.mark.current
+@pytest.mark.need_review
 def test_guest_can_go_to_login_page_from_product_page(browser):
     link = "http://selenium1py.pythonanywhere.com/en-gb/catalogue/the-city-and-the-stars_95/"
     page = ProductPage(browser, link)
@@ -91,7 +78,7 @@ def test_guest_can_go_to_login_page_from_product_page(browser):
     page.go_to_login_page()
     page.should_be_login_url()
 
-@pytest.mark.checks
+@pytest.mark.need_review
 def test_guest_cant_see_product_in_basket_opened_from_product_page(browser):
     link = "http://selenium1py.pythonanywhere.com/"
     page = ProductPage(browser, link)
@@ -122,18 +109,15 @@ class TestUserAddToBasketFromProductPage():
 
     def test_user_cant_see_success_message(self, browser):
         link = "http://selenium1py.pythonanywhere.com/catalogue/coders-at-work_207/?promo=offer0"
-        """
-        Тест кейс для проверки того, что юзер не видит сообщение об успешном добавлении в корзину при открытии страницы
-        """
+     
         product_page = ProductPage(browser, link)
         product_page.open()
         product_page.should_not_be_success_message()
 
+    @pytest.mark.need_review
     def test_user_can_add_product_to_basket(self, browser):
         link = "http://selenium1py.pythonanywhere.com/catalogue/coders-at-work_207/?promo=offer0"
-        """
-        Тест кейс для проверки того, что юзер может добавить продукт в корзину
-        """
+  
         product_page = ProductPage(browser, link)
         product_page.open()
         time.sleep(5)
